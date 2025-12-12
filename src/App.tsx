@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { useEffect } from "react";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
@@ -14,105 +13,41 @@ import EmergencyCard from "@/pages/EmergencyCard";
 import AIAdvisor from "@/pages/AIAdvisor";
 import FamilyAssistant from "@/pages/FamilyAssistant";
 import ChildProfile from "@/pages/ChildProfile";
-import ProtectedRoute from "@/components/ProtectedRoute";
+// ما نحتاج ProtectedRoute في وضع الديمو بدون لوق إن
 
 export default function App() {
-  // Demo: disable auth bootstrap and loading gate for public access.
+  const isDemo = import.meta.env.VITE_DEMO_MODE === "true";
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<FamilyMembers />} />
-        <Route path="/login" element={<Navigate to="/family-members" replace />} />
+        {/* 👈 الصفحة الرئيسية ترجع Home */}
+        <Route path="/" element={<Home />} />
+
+        {/* ما نبي تسجيل دخول في الديمو، خليه يرجّع للرئيسية */}
+        <Route
+          path="/login"
+          element={<Navigate to="/" replace />}
+        />
+
+        {/* تتركينها لو حابة تعرضين صفحة التسجيل مستقبلاً */}
         <Route path="/register" element={<Register />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/family-members"
-          element={
-            <ProtectedRoute>
-              <FamilyMembers />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/member/:memberId"
-          element={
-            <ProtectedRoute>
-              <MemberDetails />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/family-management"
-          element={
-            <ProtectedRoute>
-              <FamilyManagement />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/appointments"
-          element={
-            <ProtectedRoute>
-              <Appointments />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/notifications"
-          element={
-            <ProtectedRoute>
-              <Notifications />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/emergency"
-          element={
-            <ProtectedRoute>
-              <EmergencyCard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/ai"
-          element={
-            <ProtectedRoute>
-              <AIAdvisor />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/assistant"
-          element={
-            <ProtectedRoute>
-              <FamilyAssistant />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/child"
-          element={
-            <ProtectedRoute>
-              <ChildProfile />
-            </ProtectedRoute>
-          }
-        />
+
+        {/* باقي الصفحات مفتوحة بدون ProtectedRoute */}
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/family-members" element={<FamilyMembers />} />
+        <Route path="/member/:memberId" element={<MemberDetails />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/family-management" element={<FamilyManagement />} />
+        <Route path="/appointments" element={<Appointments />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/emergency" element={<EmergencyCard />} />
+        <Route path="/ai" element={<AIAdvisor />} />
+        <Route path="/assistant" element={<FamilyAssistant />} />
+        <Route path="/child" element={<ChildProfile />} />
+
+        {/* اختياري: أي مسار غلط يرجعه للرئيسية */}
+        {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
       </Routes>
     </Router>
   );
