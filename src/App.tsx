@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
@@ -13,27 +14,23 @@ import EmergencyCard from "@/pages/EmergencyCard";
 import AIAdvisor from "@/pages/AIAdvisor";
 import FamilyAssistant from "@/pages/FamilyAssistant";
 import ChildProfile from "@/pages/ChildProfile";
-// ما نحتاج ProtectedRoute في وضع الديمو بدون لوق إن
+
+// 🚫 في وضع الديمو ما نبي حماية دخول، فـ ما نستخدم ProtectedRoute
 
 export default function App() {
-  const isDemo = import.meta.env.VITE_DEMO_MODE === "true";
-
   return (
     <Router>
       <Routes>
-        {/* 👈 الصفحة الرئيسية ترجع Home */}
+        {/* 👈 الصفحة الرئيسية ترجع Home مثل ما كانت أول */}
         <Route path="/" element={<Home />} />
 
-        {/* ما نبي تسجيل دخول في الديمو، خليه يرجّع للرئيسية */}
-        <Route
-          path="/login"
-          element={<Navigate to="/" replace />}
-        />
+        {/* /login يرجع للرئيسية في وضع الديمو */}
+        <Route path="/login" element={<Navigate to="/" replace />} />
 
-        {/* تتركينها لو حابة تعرضين صفحة التسجيل مستقبلاً */}
+        {/* تتركينها لو حابة تستعرضي صفحة التسجيل مستقبلاً */}
         <Route path="/register" element={<Register />} />
 
-        {/* باقي الصفحات مفتوحة بدون ProtectedRoute */}
+        {/* بقية الصفحات مفتوحة مباشرة بدون تسجيل دخول */}
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/family-members" element={<FamilyMembers />} />
         <Route path="/member/:memberId" element={<MemberDetails />} />
@@ -46,7 +43,7 @@ export default function App() {
         <Route path="/assistant" element={<FamilyAssistant />} />
         <Route path="/child" element={<ChildProfile />} />
 
-        {/* اختياري: أي مسار غلط يرجعه للرئيسية */}
+        {/* أي مسار غلط رجّعيه للرئيسية (اختياري) */}
         {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
       </Routes>
     </Router>
